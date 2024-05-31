@@ -10,7 +10,7 @@ app.use(express.json());
 app.use(cors());
 
 // handle route application
-app.use('/api/v1/products', productRoutes);
+app.use('/api/products', productRoutes);
 
 app.get('/', (req: Request, res: Response) => {
   res.json('Connected with database successfully');

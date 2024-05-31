@@ -1,27 +1,55 @@
 import { z } from 'zod';
 
 // Define Schemas With Zod
-const variantValidationSchema = z.object({
-  type: z.string().min(1, 'Type is required'),
-  value: z.string().min(1, 'Value is required'),
-});
+// Variant Validation Schema
+const VariantValidationSchema = z.object(
+  {
+    type: z.string({ message: 'variant type is required' }),
+    value: z.string({ message: 'variant value is required' }),
+  },
+  { required_error: 'variant is required' },
+);
 
-const inventoryValidationSchema = z.object({
-  quantity: z.number().min(0, 'Quantity must be at least 0'),
-  inStock: z.boolean(),
-});
+// inventory validation schema
+const InventoryValidationSchema = z.object(
+  {
+    quantity: z
+      .number({ required_error: 'inventory quantity is required' })
+      .min(0, 'quantity must be at least 0'),
+    inStock: z.boolean({
+      required_error: 'inventory inStock status is required',
+    }),
+  },
+  { required_error: 'inventory is required' },
+);
 
-const productValidationSchema = z.object({
-  name: z.string().min(1, 'Name is required'),
-  description: z.string().min(1, 'Description is required'),
-  price: z.number().positive('Price must be greater than 0'),
-  category: z.string().min(1, 'Category is required'),
-  tags: z.array(z.string().min(1, 'Tag cannot be empty')),
+// product validation schema
+const ProductValidationSchema = z.object({
+  name: z.string({ message: 'product name is required' }),
+  description: z.string({ message: 'product description is required' }),
+  price: z
+    .number({ required_error: 'product price is required' })
+    .positive({ message: 'product price must be a positive number' }),
+  category: z.string({ message: 'product category is required' }),
+  tags: z
+    .array(z.string(), { required_error: 'product tags are required' })
+    .nonempty({ message: 'product tags must contain at least one tag' }),
   variants: z
-    .array(variantValidationSchema)
-    .min(1, 'At least one variant is required'),
-  inventory: inventoryValidationSchema,
+    .array(VariantValidationSchema, {
+      required_error: 'product variants are required',
+    })
+    .nonempty({
+      message: 'product variants must contain at least one variant',
+    }),
+  inventory: InventoryValidationSchema.refine((data) => data.quantity >= 0, {
+    message: 'inventory quantity must be non-negative',
+    path: ['quantity'],
+  }),
 });
 
 // Export main product validation Schemas
-export default productValidationSchema;
+export default ProductValidationSchema;
+
+export const ProductIdValidation = z
+  .string({ message: 'Valid product id is required' })
+  .length(24, { message: 'Product ID must be 24 characters long' });
