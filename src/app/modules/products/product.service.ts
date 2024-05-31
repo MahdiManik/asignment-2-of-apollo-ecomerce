@@ -46,8 +46,31 @@ const getSingleProductFromDB = async (id: string, singleProduct: TProduct) => {
   return result;
 };
 
+// update a product
+const updateAProductFromDB = async (id: string, updatedProduct: TProduct) => {
+  try {
+    const result = await ProductModel.findByIdAndUpdate(id, updatedProduct, {
+      new: true,
+      runValidators: true,
+    });
+
+    return result;
+  } catch (error) {
+    console.error('Error updating product:', error);
+    return null;
+  }
+};
+
+// Delete a product
+const deleteAProductToDB = async (id: string) => {
+  const result = await ProductModel.findByIdAndDelete({ _id: id });
+  return result;
+};
+
 export const productServices = {
   createProductIntoDB,
   getAllProductFromDB,
   getSingleProductFromDB,
+  updateAProductFromDB,
+  deleteAProductToDB,
 };
