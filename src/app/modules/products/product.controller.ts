@@ -60,15 +60,15 @@ const getAllProducts = async (req: Request, res: Response) => {
 const getSingleProduct = async (req: Request, res: Response) => {
   try {
     const singleProductData = req.body;
-    console.log(req.params);
+
     const { productId } = req.params;
 
     const validatedData = ProductIdValidation.parse(productId);
-
     const result = await productServices.getSingleProductFromDB(
       validatedData,
       singleProductData,
     );
+
     res.status(200).json({
       success: true,
       message: 'Product fetched successfully!',
