@@ -5,7 +5,7 @@ import orderValidationSchema from './order.validation.schema';
 // create a order operation
 const createAOrder = async (req: Request, res: Response) => {
   try {
-    const orderedData = req.body;
+    const { orders: orderedData } = req.body;
 
     // Validation
     const validatedData = orderValidationSchema.parse(orderedData);
@@ -88,29 +88,6 @@ const getAllOrders = async (req: Request, res: Response) => {
     });
   }
 };
-
-// const getAllOrders = async (req: Request, res: Response) => {
-//   try {
-//     const result = await orderServices.getAllOrdersFromDB(req);
-//     if (result.success) {
-//       res.status(200).json({
-//         ...result,
-//       });
-//     } else {
-//       res.status(500).json({
-//         success: false,
-//         message: 'Order not found',
-//       });
-//     }
-//   } catch (err) {
-//     if (err instanceof Error) {
-//       res.status(500).json({
-//         success: false,
-//         message: 'invalid query parameter.',
-//       });
-//     }
-//   }
-// };
 
 export const orderController = {
   createAOrder,

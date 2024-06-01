@@ -7,12 +7,12 @@ import ProductValidationSchema, {
 // product create operation
 const createProduct = async (req: Request, res: Response) => {
   try {
-    const { product: productData } = req.body;
+    const { products: productData } = req.body;
 
     // creating validation using zod
     const zodParsedData = ProductValidationSchema.parse(productData);
     const result = await productServices.createProductIntoDB(zodParsedData);
-
+    productData;
     res.status(200).json({
       success: true,
       message: 'Product created successfully!',
@@ -21,14 +21,9 @@ const createProduct = async (req: Request, res: Response) => {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
-    const issue: Array<string> = [];
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    err?.issues?.map((item: any) => issue.push(item.message));
     res.status(500).json({
       success: false,
-      message: err.message || 'Something went wrong',
-      issue: issue as Array<string>,
+      message: err || 'Something went wrong',
     });
   }
 };

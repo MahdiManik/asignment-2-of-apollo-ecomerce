@@ -104,40 +104,6 @@ const getAllOrdersFromDB = async (request: Request) => {
   }
 };
 
-// const getAllOrdersFromDB = async (request: Request) => {
-//   const { email } = request.query;
-//   const queryObjectLength = Object.keys(request.query).length;
-
-//   if (email) {
-//     // email validation
-//     const validatedEmail = orderEmailValidation.parse(email);
-//     // this is the query parameters.
-//     const result = await OrderModel.find({ email: validatedEmail });
-//     if (result.length > 0) {
-//       return {
-//         success: true,
-//         message: 'Orders fetched successfully for user email!',
-//         data: result,
-//       };
-//     } else {
-//       return { success: false };
-//     }
-//   } else if (queryObjectLength === 0) {
-//     const result = await OrderModel.find();
-//     if (result.length > 0) {
-//       return {
-//         success: true,
-//         message: 'Orders fetched successfully!',
-//         data: result,
-//       };
-//     } else {
-//       return { success: false };
-//     }
-//   } else {
-//     throw new Error('Incorrect query parameter.');
-//   }
-// };
-
 export const orderServices = {
   checkInventoryIntoDB,
   updateInventoryQuantity,
