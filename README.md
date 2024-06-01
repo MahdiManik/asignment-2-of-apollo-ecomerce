@@ -8,7 +8,7 @@ The Sample project aims to develop a sample E-commerce Product and order server.
 
 GitHub Repository URL (Server): https://github.com/MahdiManik/asignment-2-of-apollo-ecomerce
 
-Live Server Link: https://asignment-2-of-the-apollo-ecomerce.vercel.app/
+Live Server Link: https://asignment-2-of-apollo-ecomerce.vercel.app/
 
 ## Project Summary
 
@@ -48,7 +48,7 @@ Zod: Used for data validation to ensure data integrity.
 
 1. **Clone the Repository:** Clone the project server repository to your local development environment using the following command:
    ```
-   git clone https://github.com/MahdiManik/my-blog-app.git
+   git clone https://github.com/MahdiManik/asignment-2-of-apollo-ecomerce.git
    ```
 2. **Run the command:** Open your terminal and run this command:
 
@@ -72,7 +72,3 @@ npm run start:dev
 ```
 
 Thanks.
-
-```
-
-```
