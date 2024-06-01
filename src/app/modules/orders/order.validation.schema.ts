@@ -17,4 +17,6 @@ const orderValidationSchema = z.object({
 });
 
 export default orderValidationSchema;
-export const orderEmailValidation = z.string().email;
+export const orderEmailValidation = z
+  .string()
+  .email('Valid email address is required.');

@@ -1,6 +1,8 @@
+import { Request } from 'express';
 import { ProductModel } from '../products/product.model';
 import { TOrders } from './order.interface';
 import { OrderModel } from './order.model';
+import { orderEmailValidation } from './order.validation.schema';
 
 // check the inventory
 const checkInventoryIntoDB = async (
@@ -38,8 +40,107 @@ const createOrderIntoDB = async (orderData: TOrders) => {
   return result;
 };
 
+// showed all orders and single order with email also
+const getAllOrdersFromDB = async (request: Request) => {
+  try {
+    const { email } = request.query;
+
+    // Check if email query parameter exists
+    if (email) {
+      // Validate email
+      const validatedEmail = orderEmailValidation.parse(email);
+
+      // Fetch orders for the validated email
+      const result = await OrderModel.find({ email: validatedEmail });
+
+      // Check if any orders were found
+      if (result.length > 0) {
+        return {
+          success: true,
+          message: 'Orders fetched successfully for user email!',
+          data: result,
+        };
+      }
+
+      // No orders found for the email
+      return {
+        success: false,
+        message: 'No orders found for the provided email.',
+      };
+    }
+
+    // Check if there are no query parameters
+    if (Object.keys(request.query).length === 0) {
+      // Fetch all orders
+      const result = await OrderModel.find();
+
+      // Check if any orders were found
+      if (result.length > 0) {
+        return {
+          success: true,
+          message: 'Orders fetched successfully!',
+          data: result,
+        };
+      }
+
+      // No orders found
+      return {
+        success: false,
+        message: 'No orders found.',
+      };
+    }
+
+    // Incorrect query parameters provided
+    return {
+      success: false,
+      message: 'Incorrect query parameter.',
+    };
+  } catch (error: any) {
+    // Handle any errors
+    return {
+      success: false,
+      message: error.message || 'An error occurred while fetching orders.',
+    };
+  }
+};
+
+// const getAllOrdersFromDB = async (request: Request) => {
+//   const { email } = request.query;
+//   const queryObjectLength = Object.keys(request.query).length;
+
+//   if (email) {
+//     // email validation
+//     const validatedEmail = orderEmailValidation.parse(email);
+//     // this is the query parameters.
+//     const result = await OrderModel.find({ email: validatedEmail });
+//     if (result.length > 0) {
+//       return {
+//         success: true,
+//         message: 'Orders fetched successfully for user email!',
+//         data: result,
+//       };
+//     } else {
+//       return { success: false };
+//     }
+//   } else if (queryObjectLength === 0) {
+//     const result = await OrderModel.find();
+//     if (result.length > 0) {
+//       return {
+//         success: true,
+//         message: 'Orders fetched successfully!',
+//         data: result,
+//       };
+//     } else {
+//       return { success: false };
+//     }
+//   } else {
+//     throw new Error('Incorrect query parameter.');
+//   }
+// };
+
 export const orderServices = {
   checkInventoryIntoDB,
   updateInventoryQuantity,
   createOrderIntoDB,
+  getAllOrdersFromDB,
 };
